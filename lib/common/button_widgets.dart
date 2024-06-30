@@ -53,11 +53,13 @@ class AppBoxDecorationImage extends StatelessWidget {
   final double width;
   final double height;
   final String imagePath;
+  final Color color;
   const AppBoxDecorationImage(
       {super.key,
       this.width = 40,
       this.height = 40,
-      this.imagePath = ""});
+      this.imagePath = "",
+      this.color = Colors.transparent});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +67,7 @@ class AppBoxDecorationImage extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: Colors.grey,
+        color: color,
         image: DecorationImage(
           fit: BoxFit.fitHeight,
           image: AssetImage(imagePath),

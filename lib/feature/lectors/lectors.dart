@@ -58,7 +58,7 @@ class _LectorsState extends ConsumerState<Lectors> {
                   title: lectorsLevel1Unit(
                     item: ref.watch(lectorsVMProvider)[index],
                     enter: () {
-                      //testRiverpodInstantUpdate(ref, index);
+                      testRiverpodInstantUpdate(ref, index);
                     },
                   ),
                   children: [
@@ -110,7 +110,7 @@ Widget lectorsLevel1Unit({required item, void Function()? enter}) {
     children: [
       GestureDetector(
         onTap: enter,
-        child: const AppBoxDecorationImage(),
+        child: AppBoxDecorationImage(color: item.avatarColor,),
       ),
       const SizedBox(width: 10),
       Column(
@@ -176,8 +176,9 @@ void testRiverpodInstantUpdate(WidgetRef ref, int index) {
   //           courses: List.generate(
   //             4,
   //             (courseIndex) => LectorsCourse(
-  //               time: "T $courseIndex",
-  //               name: "C $courseIndex",
+  //               time: "T $index $courseIndex",
+  //               name: "C $index $courseIndex",
+  //               description: "DD $courseIndex",
   //             ),
   //           ),
   //         ),
@@ -185,13 +186,14 @@ void testRiverpodInstantUpdate(WidgetRef ref, int index) {
   //     );
   ref.read(lectorsVMProvider.notifier).onIndexChange(
       index: index,
-      title: "tt",
-      name: "nn",
+      title: "tt $index",
+      name: "nn $index",
       courses: List.generate(
         4,
         (courseIndex) => LectorsCourse(
-          time: "tt $courseIndex",
-          name: "cc $courseIndex",
+          time: "tt $index $courseIndex",
+          name: "cc $index $courseIndex",
+          description:  "dd $index $courseIndex",
         ),
       ));
 }

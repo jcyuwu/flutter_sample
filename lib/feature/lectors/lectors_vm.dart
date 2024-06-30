@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'lectors_vm.g.dart';
 
@@ -11,6 +12,8 @@ class LectorsVM extends _$LectorsVM {
     return List.generate(
       10,
       (index) => LectorsItem(
+        avatarColor: Color.fromRGBO(Random().nextInt(255),
+            Random().nextInt(255), Random().nextInt(255), 1),
         avatarPath: "",
         title: "Title $index",
         name: "Name $index",
@@ -30,8 +33,8 @@ class LectorsVM extends _$LectorsVM {
     state = items;
   }
 
-  void onIndexChange({required int index, String? avatarPath, String? title, String? name, List<LectorsCourse>? courses}) {
-    state[index] = state[index].copyWith(avatarPath: avatarPath, title: title, name: name, courses: courses);
+  void onIndexChange({required int index, Color? avatarColor, String? avatarPath, String? title, String? name, List<LectorsCourse>? courses}) {
+    state[index] = state[index].copyWith(avatarColor: avatarColor, avatarPath: avatarPath, title: title, name: name, courses: courses);
     List<LectorsItem> newState = List.generate(
       state.length,
       (index) => state[index]
@@ -41,12 +44,14 @@ class LectorsVM extends _$LectorsVM {
 }
 
 class LectorsItem {
+  final Color avatarColor;
   final String avatarPath;
   final String title;
   final String name;
   final List<LectorsCourse> courses;
 
   LectorsItem({
+    this.avatarColor = Colors.transparent,
     this.avatarPath = "",
     this.title = "professor",
     this.name = "x",
@@ -54,8 +59,9 @@ class LectorsItem {
   });
 
   LectorsItem copyWith(
-      {String? avatarPath, String? title, String? name, List<LectorsCourse>? courses}) {
+      {Color? avatarColor, String? avatarPath, String? title, String? name, List<LectorsCourse>? courses}) {
     return LectorsItem(
+      avatarColor: avatarColor ?? this.avatarColor,
       avatarPath: avatarPath ?? this.avatarPath,
       title: title ?? this.title,
       name: name ?? this.name, 
