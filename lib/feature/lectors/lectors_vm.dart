@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 part 'lectors_vm.g.dart';
 
@@ -13,7 +15,7 @@ class LectorsVM extends _$LectorsVM {
         title: "Title $index",
         name: "Name $index",
         courses: List.generate(
-          3,
+          Random().nextInt(3)+2,
           (courseIndex) => LectorsCourse(
             time: "Time $index $courseIndex",
             name: "Course $index $courseIndex",
