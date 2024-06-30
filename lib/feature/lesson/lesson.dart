@@ -25,13 +25,23 @@ class _LessonState extends ConsumerState<Lesson> {
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: lessonAppBar(ref: ref),
-          body: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 25),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 25),
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  const SizedBox(height: 10),
                   Center(
+                    child: Text16Normal(
+                        text: ref.watch(lessonVMProvider).time,
+                        color: AppColors.primaryText),
                   ),
+                  const SizedBox(height: 30),
+                  Center(
+                    child: Text24Normal(
+                        text: ref.watch(lessonVMProvider).description,
+                        color: AppColors.primaryText),
+                  )
                 ],
               ),
             ),
@@ -51,8 +61,9 @@ AppBar lessonAppBar({required WidgetRef ref, void Function()? back}) {
         children: [
           GestureDetector(
             onTap: back,
-            child: 
-            Text24Normal(text: ref.watch(lessonVMProvider).name, color: AppColors.primaryText),
+            child: Text24Normal(
+                text: ref.watch(lessonVMProvider).name,
+                color: AppColors.primaryText),
           ),
         ],
       ),

@@ -19,6 +19,7 @@ class LectorsVM extends _$LectorsVM {
           (courseIndex) => LectorsCourse(
             time: "Time $index $courseIndex",
             name: "Course $index $courseIndex",
+            description: "Description $index $courseIndex",
           ),
         ),
       ),
@@ -66,16 +67,19 @@ class LectorsItem {
 class LectorsCourse {
   final String time;
   final String name;
+  final String description;
 
   const LectorsCourse({
     this.time = "",
     this.name = "flutter",
+    this.description = "learn flutter programing",
   });
 
-  LectorsCourse copyWith({String? time, String? name}) {
+  LectorsCourse copyWith({String? time, String? name, String? description}) {
     return LectorsCourse(
       time: time ?? this.time,
       name: name ?? this.name,
+      description: description ?? this.description,
     );
   }
 }
