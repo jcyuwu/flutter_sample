@@ -28,16 +28,15 @@ class _HomeState extends ConsumerState<Home> {
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: SingleChildScrollView(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Center(
                     child: appButton(
                       buttonName: "講師清單",
                       isLogin: true,
                       context: context,
-                      func: () =>
-                          Navigator.pushNamed(context, AppRoutesNames.LECTORS),
+                      func: () {
+                        Navigator.pushNamed(context, AppRoutesNames.LECTORS);
+                      }
                     ),
                   ),
                 ],

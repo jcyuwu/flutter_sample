@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sample/feature/home.dart';
-import 'package:flutter_sample/feature/lectors.dart';
+import 'package:flutter_sample/feature/home/home.dart';
+import 'package:flutter_sample/feature/lectors/lectors.dart';
+import 'package:flutter_sample/feature/lesson/lesson.dart';
 
 class AppPages {
   static List<RouteEntity> routes() {
@@ -12,6 +13,7 @@ class AppPages {
       //RouteEntity(path: AppRoutesNames.APPLICATION, page: const Application()),
       RouteEntity(path: AppRoutesNames.HOME, page: const Home()),
       RouteEntity(path: AppRoutesNames.LECTORS, page: const Lectors()),
+      RouteEntity(path: AppRoutesNames.LESSON, page: const Lesson()),
     ];
   }
 
@@ -50,4 +52,5 @@ class AppRoutesNames {
   //static const String APPLICATION = "/application";
   static const String HOME = "/home";
   static const String LECTORS = "/lectors";
+  static const String LESSON = "/lesson";
 }

@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_sample/common/app_colors.dart';
 import 'package:flutter_sample/common/button_widgets.dart';
+import 'package:flutter_sample/common/routes.dart';
 import 'package:flutter_sample/common/text_widgets.dart';
+import 'package:flutter_sample/feature/lectors/lectors_vm.dart';
+import 'package:flutter_sample/feature/lesson/lesson_vm.dart';
 
 class Lectors extends ConsumerStatefulWidget {
   const Lectors({super.key});
@@ -12,11 +15,11 @@ class Lectors extends ConsumerStatefulWidget {
 }
 
 class _LectorsState extends ConsumerState<Lectors> {
-  List<String> items = List.generate(10, (index) => 'Item ${index + 1}');
-  List<bool> itemsIsExpanded = List.generate(10, (index) => false);
+  late List<bool> itemsIsExpanded;
 
   @override
   void didChangeDependencies() {
+    itemsIsExpanded = List.generate(10, (index) => false);
     super.didChangeDependencies();
   }
 
@@ -34,8 +37,10 @@ class _LectorsState extends ConsumerState<Lectors> {
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
             child: ListView.separated(
-              itemCount: items.length,
+              itemCount: ref.watch(lectorsVMProvider).length,
               itemBuilder: (context, index) {
+                itemsIsExpanded = List.generate(
+                    ref.watch(lectorsVMProvider).length, (index) => false);
                 return ExpansionTile(
                   onExpansionChanged: (bool expanding) =>
                       setState(() => itemsIsExpanded[index] = expanding),
@@ -50,40 +55,41 @@ class _LectorsState extends ConsumerState<Lectors> {
                     side: const BorderSide(color: AppColors.primaryText),
                     borderRadius: BorderRadius.circular(5),
                   ),
-                  title: lectorsLevel1Unit(item: items[index], enter: null),
+                  title: lectorsLevel1Unit(
+                    item: ref.watch(lectorsVMProvider)[index],
+                    enter: () {
+                      testRiverpodInstantUpdate(ref, index);
+                    },
+                  ),
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Theme(
-                        data: Theme.of(context).copyWith(
-                          dividerColor: Colors.transparent,
-                          dividerTheme: const DividerThemeData(
-                            color: Colors.transparent,
-                            space: 0,
-                            thickness: 0,
-                            indent: 0,
-                            endIndent: 0,
+                    const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 17),
+                      child: Divider(thickness: 1, color: Colors.grey),
+                    ),
+                    ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount:
+                          ref.watch(lectorsVMProvider)[index].courses.length,
+                      itemBuilder: (context, courseIndex) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 8,
                           ),
-                        ),
-                        child: DataTable(
-                          horizontalMargin: 0,
-                          headingRowColor: MaterialStateColor.resolveWith(
-                              (states) => Colors.grey),
-                          dataRowMaxHeight: double.infinity,
-                          headingRowHeight: 1,
-                          columns: const [
-                            DataColumn(label: Text('Column A')),
-                          ],
-                          rows: [
-                            DataRow(cells: [
-                              DataCell(lectorsLevel2Unit(item: index)),
-                            ]),
-                            DataRow(cells: [
-                              DataCell(lectorsLevel2Unit(item: index)),
-                            ]),
-                          ],
-                        ),
-                      ),
+                          child: lectorsLevel2Unit(
+                            item: ref
+                                .watch(lectorsVMProvider)[index]
+                                .courses[courseIndex],
+                            enter: () {
+                              ref.read(lessonVMProvider.notifier).onChange(
+                                  ref.read(lectorsVMProvider)[index].courses[courseIndex]);
+                              Navigator.pushNamed(
+                                  context, AppRoutesNames.LESSON);
+                            },
+                          ),
+                        );
+                      },
                     ),
                   ],
                 );
@@ -103,13 +109,15 @@ Widget lectorsLevel1Unit({required item, void Function()? enter}) {
     mainAxisAlignment: MainAxisAlignment.start,
     children: [
       GestureDetector(
+        onTap: enter,
         child: const AppBoxDecorationImage(),
       ),
       const SizedBox(width: 10),
       Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text16Normal(text: item, color: Colors.grey),
-          Text(item),
+          Text16Normal(text: item.title, color: Colors.grey),
+          Text(item.name),
         ],
       ),
     ],
@@ -123,9 +131,10 @@ Widget lectorsLevel2Unit({required item, void Function()? enter}) {
       const Icon(Icons.calendar_month_outlined, color: Colors.grey),
       const SizedBox(width: 10),
       Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Data ${item + 1}B'),
-          Text('Data ${item + 1}B'),
+          Text(item.name),
+          Text(item.time),
         ],
       ),
       const Spacer(),
@@ -154,4 +163,35 @@ AppBar lectorsAppBar({void Function()? back}) {
       ),
     ),
   );
+}
+
+void testRiverpodInstantUpdate(WidgetRef ref, int index) {
+  // ref.read(lectorsVMProvider.notifier).onChange(
+  //       List.generate(
+  //         5,
+  //         (index) => LectorsItem(
+  //           avatarPath: "",
+  //           title: "T $index",
+  //           name: "N $index",
+  //           courses: List.generate(
+  //             4,
+  //             (courseIndex) => LectorsCourse(
+  //               time: "T $courseIndex",
+  //               name: "C $courseIndex",
+  //             ),
+  //           ),
+  //         ),
+  //       ),
+  //     );
+  ref.read(lectorsVMProvider.notifier).onIndexChange(
+      index: index,
+      title: "tt",
+      name: "nn",
+      courses: List.generate(
+        4,
+        (courseIndex) => LectorsCourse(
+          time: "tt $courseIndex",
+          name: "cc $courseIndex",
+        ),
+      ));
 }
