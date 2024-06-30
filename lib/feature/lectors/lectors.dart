@@ -58,7 +58,7 @@ class _LectorsState extends ConsumerState<Lectors> {
                   title: lectorsLevel1Unit(
                     item: ref.watch(lectorsVMProvider)[index],
                     enter: () {
-                      testRiverpodInstantUpdate(ref, index);
+                      //testRiverpodInstantUpdate(ref, index);
                     },
                   ),
                   children: [
